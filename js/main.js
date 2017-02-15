@@ -70,6 +70,7 @@
             });
     }
 
+    
     //Ajout dans les participants à la bêta
     firebase.auth().onAuthStateChanged(function(user){
         if(user){

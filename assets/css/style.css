@@ -167,7 +167,7 @@ article{
     position: absolute;
     top:50%;
     left:50%;
-    z-index: 1;
+    z-index: 2;
     background: #FFFFFF;
     margin: 0 auto 100px;
     border: 45px solid white;
