@@ -2,6 +2,17 @@
  * Created by POL on 12/02/2017.
  */
 (function($){
+    // Initialize Firebase
+    let config = {
+        apiKey: "AIzaSyA-NJEpkQDup6K1HoLiA9-FvkwvE8xCLZc",
+        authDomain: "dm-henry.firebaseapp.com",
+        databaseURL: "https://dm-henry.firebaseio.com",
+        storageBucket: "dm-henry.appspot.com",
+        messagingSenderId: "907133393384"
+    };
+    firebase.initializeApp(config);
+    let database = firebase.database();
+
     //SmoothScroll
     $('.scroll').on('click', function() { // Au clic sur un élément
         let page;
@@ -17,15 +28,59 @@
     });
 
 
-    // Initialize Firebase
-    let config = {
-        apiKey: "AIzaSyA-NJEpkQDup6K1HoLiA9-FvkwvE8xCLZc",
-        authDomain: "dm-henry.firebaseapp.com",
-        databaseURL: "https://dm-henry.firebaseio.com",
-        storageBucket: "dm-henry.appspot.com",
-        messagingSenderId: "907133393384"
-    };
-    firebase.initializeApp(config);
+    //Ajout d'un visiteur dans la base
+    let countVisit = setTimeout(function(){
+        //Save in firebase number of visitors
+        let visitStats = database.ref("totalVisitors");
+        visitStats.once('value').then(function (snapshot) {
+            let nVisitors = snapshot.val();
+            visitStats.set(nVisitors + 1);
+        })
+    },5000);
+    googleSignout()
+    //Google and Facebook firebase Auth
+    var provider = new firebase.auth.GoogleAuthProvider();
+
+    $('#google-btn').on('click',function () {
+        googleSignin();
+    })
+    function googleSignin() {
+        firebase.auth()
+            .signInWithPopup(provider).then(function(result) {
+            var token = result.credential.accessToken;
+            var user = result.user;
+        }).catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+
+            console.log(error.code)
+            console.log(error.message)
+        });
+    }
+    function googleSignout() {
+        firebase.auth().signOut()
+
+            .then(function() {
+                $('#user-name').html('');
+                $('#googleSignOut').remove();
+                $('.content').append('<button id="googleSign">Google Signin</button>');
+                console.log('Signout Succesfull')
+            }, function(error) {
+                console.log('Signout Failed')
+            });
+    }
+    //Ajout dans les participants à la bêta
+    firebase.auth().onAuthStateChanged(function(user){
+        if(user){
+            console.log(user)
+            //Efface les RS et affiche le message de succès
+            $('.rs-box').html('Bravo vous êtes inscrits à la bêta !');
+            //Ajouter dans firebase l'adresse
+        }
+        else{
+            //if not connected
+        }
+    });
 
     //Show input for newsletter
     $('#mail-btn').on('click', function(){
@@ -83,6 +138,9 @@
             rect.left <= (window.innerWidth || document.documentElement.clientWidth)
         );
     };
+
+
+    /***TRACKING***/
 
 
 

@@ -129,7 +129,7 @@ article{
     top:50%;left:50%;
     transform: translate(-50%,-50%);
 }
-#slide-1{
+#slide-1, #slide-tracking{
     color: white;
     background: url('../img/fond-albion.jpg');
     background-size: cover;
@@ -153,6 +153,11 @@ article{
 }
 #cta-play:hover {
     background-color: #1a263d;
+}
+#slide-2{
+    color:white;
+    background: url('../img/albion-monde.jpg');
+    background-size: cover;
 }
 #slide-3{
     background: url('../img/grey-albion-castle-background.jpg');
