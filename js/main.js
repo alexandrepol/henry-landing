@@ -37,8 +37,28 @@
 
     //CTA - Jouer maintenant
     $('#cta-play').on('click', function(){
-       console.log('cta');
+       let link = $(this).attr('id');
+       writeCTA(link)
     });
+
+    function writeCTA(link){
+        let uid = link
+        let count = database.ref("cta/"+link);
+        count.once('value').then(function (snapshot) {
+            let nCount = snapshot.val();
+            if(nCount != null){
+                firebase.database().ref('cta/' + uid).set({
+                    number:nCount.number+1
+                });
+            }
+            else{
+                firebase.database().ref('cta/' + uid).set({
+                    number:1
+                });
+            }
+        })
+
+    }
 
     //Ajout d'un visiteur dans la base
     let countVisit = setTimeout(function(){
@@ -124,7 +144,10 @@
             let mailInput = document.getElementById('newsletter-mail').value;
             if(validateEmail(mailInput)){
                 //Save in Firebase and show success
-                console.log('send');
+                let uid = hashCode(mailInput)
+                let from = "Mail";
+                writeUserBeta(uid, mailInput, from);
+                $('.rs-box').html('Bravo vous êtes inscrits à la bêta !');
             }
             return false;
         }
@@ -133,10 +156,23 @@
         let mailInput = document.getElementById('newsletter-mail').value;
         if(validateEmail(mailInput)){
             //Save in Firebase and show success
+            let uid = hashCode(mailInput)
+            let from = "Mail";
+            writeUserBeta(uid, mailInput, from);
+            $('.rs-box').html('Bravo vous êtes inscrits à la bêta !');
             console.log('send');
         }
     })
-
+    hashCode = function(str){
+        var hash = 0;
+        if (str.length == 0) return hash;
+        for (i = 0; i < str.length; i++) {
+            char = str.charCodeAt(i);
+            hash = ((hash<<5)-hash)+char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return hash;
+    }
     function validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
