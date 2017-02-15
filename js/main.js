@@ -13,6 +13,8 @@
     firebase.initializeApp(config);
     let database = firebase.database();
 
+    //Get current div and check % of site view
+
     //SmoothScroll
     $('.scroll').on('click', function() { // Au clic sur un élément
         let page;
@@ -27,6 +29,16 @@
         return false;
     });
 
+    //Mousemove
+    var slideMove = document.getElementById('slide-1');
+    slideMove.addEventListener('mousemove', function(e){
+       console.log(e.pageX);
+    });
+
+    //CTA - Jouer maintenant
+    $('#cta-play').on('click', function(){
+       console.log('cta');
+    });
 
     //Ajout d'un visiteur dans la base
     let countVisit = setTimeout(function(){
@@ -47,11 +59,18 @@
     function googleSignin() {
         firebase.auth()
             .signInWithPopup(provider).then(function(result) {
-            var token = result.credential.accessToken;
-            var user = result.user;
+            let token = result.credential.accessToken;
+            let user = result.user;
+            //Sign with Google add Beta User in firebase
+            let uid = result.user.uid
+            let mail = result.user.email;
+            let from = "Google";
+            writeUserBeta(uid, mail, from);
+
+
         }).catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
+            let errorCode = error.code;
+            let errorMessage = error.message;
 
             console.log(error.code)
             console.log(error.message)
@@ -61,14 +80,18 @@
         firebase.auth().signOut()
 
             .then(function() {
-                $('#user-name').html('');
-                $('#googleSignOut').remove();
-                $('.content').append('<button id="googleSign">Google Signin</button>');
                 console.log('Signout Succesfull')
             }, function(error) {
                 console.log('Signout Failed')
             });
     }
+    function writeUserBeta(uid,mail,from){
+        firebase.database().ref('beta/' + uid).set({
+            mail: mail,
+            from: from
+        });
+    }
+
     //Ajout dans les participants à la bêta
     firebase.auth().onAuthStateChanged(function(user){
         if(user){
