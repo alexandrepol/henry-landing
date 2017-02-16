@@ -112,7 +112,7 @@ a{
 
 }
 article{
-    height:100vh;
+    min-height: 100vh;
     position: relative;
     text-align: center;
 }
@@ -142,7 +142,7 @@ article{
 #slide-1, #slide-tracking{
     color: white;
     background: url('../img/fond-albion.jpg');
-    background-size: cover;
+    background-size: auto;
 }
 #slide-1 .content h1, #slide-1 .content p{
     color: white;
@@ -170,8 +170,8 @@ article{
     width:100%;
     background: url('../img/chevalier.png');
     background-size: 270px;
-    background-position-x: 200px;
-    background-position-y: 148px;
+    background-position-x: 350px;
+    background-position-y: 390px;
     background-repeat: no-repeat;
     z-index: 1;
 }
@@ -180,9 +180,9 @@ article{
     position: absolute;
     width:100%;
     background: url('../img/mamuth.png');
-    background-size: 200px;
-    background-position-x: 890px;
-    background-position-y: 380px ;
+    background-size: 280px;
+    background-position-x: 1280px;
+    background-position-y: 540px ;
     background-repeat: no-repeat;
     z-index: 1;
 }
@@ -361,6 +361,20 @@ footer{
 #cta-title{
     color:red;
 }
+.content-back h4{
+    color:red;
+}
+.graph{
+    width:50%;
+    height:300px;
+    border:1px solid magenta;
+}
+.stats-item-bar{
+    display: inline-block;
+    margin:5px;
+    border:1px solid red;
+    width:30px;
+ }
 
 
 /*****ENDTRACKING*****/
