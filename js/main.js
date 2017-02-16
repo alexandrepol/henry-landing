@@ -60,6 +60,8 @@
 
     }
 
+
+
     //Ajout d'un visiteur dans la base
     let countVisit = setTimeout(function(){
         //Save in firebase number of visitors
@@ -69,6 +71,23 @@
             visitStats.set(nVisitors + 1);
         })
     },5000);
+
+
+    //On parle de nous
+    let testimonialsRef = database.ref("testimonials");
+    testimonialsRef.on('value', function (snapshot) {
+        let testiDiv = $('.testi');
+        testiDiv.empty();
+        snapshot.forEach(function(childSnap){
+            console.log(testiDiv);
+            let html = '<div class="testi-user"> <h4 class="testi-name">'+childSnap.key+'</h4>';
+            html +=  '<img class="testi-img" src="'+childSnap.val().imgUrl+'">'
+            html +=  '<p class="testi-text">'+childSnap.val().text+'</p></div>';
+            testiDiv.append(html);
+            
+        });
+    });
+
     googleSignout()
     //Google and Facebook firebase Auth
     var provider = new firebase.auth.GoogleAuthProvider();

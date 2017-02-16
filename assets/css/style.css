@@ -130,6 +130,15 @@ article{
     top:50%;left:50%;
     transform: translate(-50%,-50%);
 }
+.content-back{
+    color:black;
+    background:white;
+    position: absolute;
+    top:50%;left:50%;
+    transform: translate(-50%,-50%);
+    width:60%;
+    height:60%;
+}
 #slide-1, #slide-tracking{
     color: white;
     background: url('../img/fond-albion.jpg');
@@ -182,6 +191,27 @@ article{
     color:white;
     background: url('../img/albion-monde.jpg');
     background-size: cover;
+}
+.testi-user{
+    padding:10px;
+    color:black;
+    display: inline-block;
+    width:300px;
+    height:350px;
+    z-index: 2;
+    background: #FFFFFF;
+    margin: 0 40px 100px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.testi-text{
+    font-size:.8em;
+}
+.testi-img{
+    object-fit: cover;
+    height: 120px;
+    width: 120px;
+    border-radius: 150px;
 }
 #slide-3{
     background: url('../img/grey-albion-castle-background.jpg');
@@ -327,3 +357,10 @@ footer{
     background-color:lightblue;
     text-align: center;
 }
+/*****TRACKING*****/
+#cta-title{
+    color:red;
+}
+
+
+/*****ENDTRACKING*****/
