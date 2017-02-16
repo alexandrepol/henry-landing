@@ -165,6 +165,7 @@ article{
     background-color: #1a263d;
 }
 .chevalier{
+    transition: all 1.5s ease;
     height:100%;
     position: absolute;
     width:100%;
@@ -176,6 +177,7 @@ article{
     z-index: 1;
 }
 .mamuth{
+    transition: all .7s ease;
     height:100%;
     position: absolute;
     width:100%;

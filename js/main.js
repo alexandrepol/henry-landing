@@ -30,10 +30,35 @@
     });
 
     //Mousemove
+    $( "#slide-1" ).hover(function( event ) {
+        prevX = event.pageX;
+        prevY = event.pageY;
+    }, null);
+
     var slideMove = document.getElementById('slide-1');
     slideMove.addEventListener('mousemove', function(e){
-       console.log(e.pageX);
+
+        moveBackground(e);
     });
+
+    function moveBackground( event ) {
+
+        directionMoved( event );
+
+        posX = (movedLeft) ? "-0.5%" : "0.5%";
+        posX2 = (movedLeft) ? "-0.3%" : "0.3%";
+
+        $(".chevalier").css({"-webkit-transform":"translateX("+ posX +")"});
+        $(".mamuth").css({"-webkit-transform":"translateX("+ posX2 +")"});
+        prevX = event.pageX;
+        prevY = event.pageY;
+    }
+
+    function directionMoved(event)
+    {
+        movedLeft = (prevX > event.pageX) ? true : false;
+        movedUp = (prevY > event.pageY) ? true : false;
+    }
 
     //CTA - Jouer maintenant
     $('#cta-play').on('click', function(){
@@ -91,6 +116,36 @@
     googleSignout()
     //Google and Facebook firebase Auth
     var provider = new firebase.auth.GoogleAuthProvider();
+
+    //Facebook
+    var providerFb = new firebase.auth.FacebookAuthProvider();
+    $('#fb-btn').on('click',function () {
+        fbSignin();
+    })
+    function fbSignin(){
+        firebase.auth().signInWithPopup(providerFb).then(function(result) {
+            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            console.log(user);
+            let uid = result.user.uid
+            let mail = result.user.email;
+            let from = "Facebook";
+            writeUserBeta(uid, mail, from);
+            // ...
+        }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+        });
+    }
+
 
     $('#google-btn').on('click',function () {
         googleSignin();
@@ -198,8 +253,44 @@
     }
 
     //Detect where is the user in the landing
+    var randomString = function(length) {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for(var i = 0; i < length; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    }
+    let rNumber = Math.round(Math.random()*2048);
+    let userToken = randomString(22)+rNumber;
+    console.log(userToken);
     let slide1 = document.getElementById('slide-1');
+    let slide2 = document.getElementById('slide-2');
+    let slide3 = document.getElementById('slide-3');
+
+
+    isVisible(slide1);
+    //Get pagesViewRef
+    //let pagesViewRef = database.child('/pagesView/');
+    if(isVisible(slide1)){
+        setTimeout(function () {
+            //If user see the page during 5s add to Firebase
+            console.log('ok');
+        },5000)
+    }
+
+
+    function writePagesView(uid, pourcentage){
+        firebase.database().ref('pagesView/' + uid).set({
+            pourcentage:pourcentage
+        });
+    }
+
+    console.log(isVisible(slide1))
     document.addEventListener('scroll', function () {
+        console.log(isVisible(slide2));
+        console.log(isVisible(slide3));
+
     })
 
     function isVisible(node) {
@@ -212,7 +303,7 @@
             (rect.height > 0 || rect.width > 0) &&
             rect.bottom >= 0 &&
             rect.right >= 0 &&
-            rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.top <= (window.innerHeight-200 || document.documentElement.clientHeight-200) &&
             rect.left <= (window.innerWidth || document.documentElement.clientWidth)
         );
     };
