@@ -1,4 +1,5 @@
 html,body{
+    overflow-x:hidden;
     font-size:18px;
     min-height:100%;
     padding: 0;
@@ -61,7 +62,7 @@ a{
 .dot-nav-item:after {
     display: block;
     width: 3px;
-    height: 34px;
+    height: 32px;
     margin: 16px auto 0;
     background-color: #fff;
 }
@@ -130,16 +131,16 @@ article{
     top:50%;left:50%;
     transform: translate(-50%,-50%);
 }
+#slide-tracking{
+    min-height: inherit;
+}
 .content-back{
+    margin:auto;
     color:black;
     background:white;
-    position: absolute;
-    top:50%;left:50%;
-    transform: translate(-50%,-50%);
     width:60%;
-    height:60%;
 }
-#slide-1, #slide-tracking{
+#slide-1{
     color: white;
     background: url('../img/fond-albion.jpg');
     background-size: auto;
@@ -157,7 +158,7 @@ article{
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 1px;
-    background-color: #202e4a;
+    background-color: #365468;
     border-radius: .25em;
     transition: background-color 0.3s ease;
 }
@@ -366,17 +367,29 @@ footer{
 .content-back h4{
     color:red;
 }
-.graph{
-    width:50%;
-    height:300px;
-    border:1px solid magenta;
+.graph,.listMail{
+    float:left;
+    width:49%;
+    padding:0px;
+}
+.graph-beta{
+    margin:auto;
+    padding:15px;
+}
+.ul-mail{
+    padding:15px;
+}
+.ul-mail li{
+    list-style: none;
+    text-align: left;
 }
 .stats-item-bar{
-    display: inline-block;
     margin:5px;
     border:1px solid red;
     width:30px;
  }
-
+#listPanel li{
+    list-style: none;
+}
 
 /*****ENDTRACKING*****/

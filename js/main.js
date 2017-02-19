@@ -2,6 +2,12 @@
  * Created by POL on 12/02/2017.
  */
 (function($){
+    //Variables to check panel
+    let checkPanel1;
+    let checkPanel2;
+    let checkPanel3;
+
+
     // Initialize Firebase
     let config = {
         apiKey: "AIzaSyA-NJEpkQDup6K1HoLiA9-FvkwvE8xCLZc",
@@ -37,8 +43,11 @@
 
     var slideMove = document.getElementById('slide-1');
     slideMove.addEventListener('mousemove', function(e){
-
         moveBackground(e);
+        checkPanel1 = setTimeout(function () {
+                let userPagesViewRef = firebase.database().ref("pagesView").child(userToken);
+                userPagesViewRef.update({panel1:1});
+            },5000);
     });
 
     function moveBackground( event ) {
@@ -104,7 +113,6 @@
         let testiDiv = $('.testi');
         testiDiv.empty();
         snapshot.forEach(function(childSnap){
-            console.log(testiDiv);
             let html = '<div class="testi-user"> <h4 class="testi-name">'+childSnap.key+'</h4>';
             html +=  '<img class="testi-img" src="'+childSnap.val().imgUrl+'">'
             html +=  '<p class="testi-text">'+childSnap.val().text+'</p></div>';
@@ -263,49 +271,83 @@
     }
     let rNumber = Math.round(Math.random()*2048);
     let userToken = randomString(22)+rNumber;
-    console.log(userToken);
-    let slide1 = document.getElementById('slide-1');
-    let slide2 = document.getElementById('slide-2');
-    let slide3 = document.getElementById('slide-3');
 
+    //Create user pagesView 1 = view / 0 = notview
+    writePagesView(userToken);
+    let slide1 = document.getElementById('cta-play');
+    let slide2 = document.querySelector('.testi');
+    let slide3 = document.querySelector('.form');
 
-    isVisible(slide1);
     //Get pagesViewRef
-    //let pagesViewRef = database.child('/pagesView/');
-    if(isVisible(slide1)){
-        setTimeout(function () {
-            //If user see the page during 5s add to Firebase
-            console.log('ok');
-        },5000)
-    }
+    let pagesViewRef = database.ref('/pagesView/');
+    //First check for slide1
+    let firstSlide = [document.getElementById('cta-play')];
 
 
-    function writePagesView(uid, pourcentage){
-        firebase.database().ref('pagesView/' + uid).set({
-            pourcentage:pourcentage
+
+    function writePagesView(uid){
+        firebase.database().ref('/pagesView/' + uid).set({
+            panel1:0,
+            panel2:0,
+            panel3:0
         });
     }
 
-    console.log(isVisible(slide1))
     document.addEventListener('scroll', function () {
-        console.log(isVisible(slide2));
-        console.log(isVisible(slide3));
+        let listNode = [slide1,slide2,slide3];
+        let arrayVisible = isVisible(listNode);
+
+        //Panel1
+        if(arrayVisible[0]){
+            clearTimeout(checkPanel1);
+            checkPanel1 = setTimeout(function () {
+                let userPagesViewRef = firebase.database().ref("pagesView").child(userToken);
+                userPagesViewRef.update({panel1:1});
+            },5000);
+        }
+        else{
+            clearTimeout(checkPanel1);
+        }
+
+        //Panel2
+        if(arrayVisible[1]){
+            clearTimeout(checkPanel2);
+            checkPanel2 = setTimeout(function () {
+                let userPagesViewRef = firebase.database().ref("pagesView").child(userToken);
+                userPagesViewRef.update({panel2:1});
+            },5000);
+        }
+        else{
+            clearTimeout(checkPanel2);
+        }
+
+        //Panel3
+        if(arrayVisible[2]){
+            clearTimeout(checkPanel3);
+            checkPanel3 = setTimeout(function () {
+                let userPagesViewRef = firebase.database().ref("pagesView").child(userToken);
+                userPagesViewRef.update({panel3:1});
+            },5000);
+        }
+        else{
+            clearTimeout(checkPanel3);
+        }
 
     })
 
-    function isVisible(node) {
-        // Am I visible?
-        // Height and Width are not explicitly necessary in visibility detection, the bottom, right, top and left are the
-        // essential checks. If an image is 0x0, it is technically not visible, so it should not be marked as such.
-        // That is why either width or height have to be > 0.
-        var rect = node.getBoundingClientRect();
-        return (
-            (rect.height > 0 || rect.width > 0) &&
-            rect.bottom >= 0 &&
-            rect.right >= 0 &&
-            rect.top <= (window.innerHeight-200 || document.documentElement.clientHeight-200) &&
-            rect.left <= (window.innerWidth || document.documentElement.clientWidth)
-        );
+    function isVisible(listNode) {
+        let visiblePanel = [];
+        for(let node of listNode){
+            var rect = node.getBoundingClientRect();
+            visiblePanel.push((
+                (rect.height > 0 || rect.width > 0) &&
+                rect.bottom >= 0 &&
+                rect.right >= 0 &&
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.left <= (window.innerWidth || document.documentElement.clientWidth)
+            ));
+        }
+        return visiblePanel;
     };
 
 

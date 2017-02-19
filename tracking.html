@@ -12,15 +12,24 @@
         <div class="content-back">
             <p>Nombre de visiteurs : <span id="visitsNumber"></span></p>
             <div class="cta">
-            <p id="cta-title">CTA :</p>
+            <h4 id="cta-title">CTA :</h4>
+            </div>
+            <div class="trackPanel">
+                <h4>% de pages vues par utilisateur :</h4>
+                <ul id="listPanel">
+                </ul>
             </div>
             <div class="listBeta">
                 <h4>Les bêta-testeurs :</h4>
                 <div class="listMail">
+                    <h5>Liste des participants</h5>
+                    <ul class="ul-mail">
 
+                    </ul>
                 </div>
                 <div class="graph">
-
+                    <h5>Statistiques des inscriptions via les réseaux</h5>
+                    <canvas class="graph-beta"></canvas>
                 </div>
             </div>
         </div>
@@ -35,6 +44,7 @@
             crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/06cfc0c6f4.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+    <script src="js/Chart.js"></script>
     <script src="js/tracking.js"></script>
 </body>
 </html>

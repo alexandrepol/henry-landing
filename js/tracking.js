@@ -48,7 +48,10 @@
         let fromFb = 0;
         let fromGoogle = 0;
         let fromMail = 0;
-       snap.forEach(function(childSnap){
+        let ulBox = $('.ul-mail');
+        ulBox.empty();
+        snap.forEach(function(childSnap){
+          ulBox.append('<li>'+childSnap.val().mail+'</li>');
           switch (childSnap.val().from){
               case 'Google':
                   fromGoogle++;
@@ -64,14 +67,55 @@
         let statsGoogle = (fromGoogle/totalUsers)*100;
         let statsMail = (fromMail/totalUsers)*100;
         let statsFb = (fromFb/totalUsers)*100;
-        createGraph(statsGoogle);
-
+        let data = {
+            labels:['Google','Mail','Facebook'],
+            datasets: [
+                {
+                    backgroundColor: [
+                        '#dd4b39',
+                        '#708090',
+                        '#3B5998'
+                    ],
+                    borderColor: [
+                        '#dd4b39',
+                        '#708090',
+                        '#3B5998'
+                    ],
+                    data: [statsGoogle, statsMail, statsFb],
+                }
+            ]
+        }
+        let ctx = document.querySelector('.graph-beta') ;
+        let myBarChart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: {
+                responsive:true,
+                animation:{
+                    animateScale:true
+                }
+            }
+        });
     });
 
-    //Create Graph
-    function createGraph(stats){
-        let graphDiv = $('.graph');
-        graphDiv.append('<div class="stats-item-bar" data-stats ="'+stats+'"></div>');
-    }
+    //Show pagesViews
+    let pagesViewRef = databaseRef.child('/pagesView/');
+    pagesViewRef.on('value', function (snap) {
+        let listPanel = $('#listPanel');
+        listPanel.empty();
+        let listUsers = snap.numChildren();
+        let panel1View = 0;
+        let panel2View = 0;
+        let panel3View = 0;
+        snap.forEach(function (childSnap) {
+            panel1View += childSnap.val().panel1;
+            panel2View += childSnap.val().panel2;
+            panel3View += childSnap.val().panel3;
+        });
+        listPanel.append('<li> panel 1 : '+Math.round((panel1View/listUsers)*100)+'%</li>');
+        listPanel.append('<li> panel 2 : '+Math.round((panel2View/listUsers)*100)+'%</li>');
+        listPanel.append('<li> panel 3 : '+Math.round((panel3View/listUsers)*100)+'%</li>');
+
+    })
 
 })(jQuery)
